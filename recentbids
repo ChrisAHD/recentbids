@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<?php
+
+if(!$lastbids)
+
+{
+
+echo '<div class="alert alert-info"><center>No flights have currently been booked!</center></div>';
+
+return;
+
+}
+
+?>
+
+<table class="tableult" width="100%" border="0" cellspacing="0" cellpadding="1">
+   <thead>
+ <tr>
+  	 
+   <td><font size="2"><b><center>AIRLINE</center></b></td>
+        <td><font size="2"><b><center>FLT NO.</center></b></td>
+        <td><font size="2"><b><center>PILOT</center></b></td>
+        <td><font size="2"><b><center>DEP</center></b></td>
+        <td><font size="2"><b><center>ARR</center></b></td>
+        <td><font size="2"><b><center>TIME</center></b></td></font>
+        <td><font size="2"><b><center>STATUS</center></b></td></font>
+  
+ </tr>
+   </thead>   
+<tbody>
+<?php
+foreach($lastbids as $lastbid)
+{
+?>
+ <tr>
+     <td height="15" width="15" align="center">
+         <img src="http://virtualowa.net/en/lib/skins/owa/img/board/<?php echo $lastbid->code; ?>.png"  height="24" width="100" alt="<?php echo $lastbid->code; ?>" /></font> </td>    
+
+   
+  
+    <td align="center"><font size="2"><?php echo $lastbid->code . $lastbid->flightnum; ?></font></td>
+    
+    <?php
+    $params = $lastbid->pilotid;
+    $pilot = PilotData::GetPilotData($params);
+    $pname = $pilot->firstname;
+    $psurname = $pilot->lastname;
+    ?>
+    <td align="center"><font size="2"><a href="http://virtualowa.net/en/index.php/profile/view/<?php echo $lastbid->pilotid; ?>"><?php echo $pname; ?> </a></font></td>
+    <td align="center"><font size="2"><button type="button" class="btn btn-round btn-outline-success btn-sm"><?php echo $lastbid->depicao; ?></button></font></td>
+    <td align="center"><font size="2"><button type="button" class="btn btn-round btn-outline-danger btn-sm"><?php echo $lastbid->arricao; ?></button></font></td>
+    <td align="center"><font size="2"><?php echo $lastbid->flighttime; ?>hr </font></td>
+    <td class="small"><?php
+                        if($pirep->accepted == PIREP_ACCEPTED)
+                        echo '<font color="green">Arrived</font>';
+                        elseif($pirep->accepted == PIREP_REJECTED)
+                        echo '<font color="red">Rejected</font>';
+                        elseif($pirep->accepted == PIREP_PENDING)
+                        echo '<button type="button" class="btn btn-round btn-outline-warning btn-sm">Sched</button>';
+                        elseif($pirep->accepted == PIREP_INPROGRESS)
+                        echo '<button type="button" class="btn btn-round btn-outline-info btn-sm">Enroute</button>';
+                        ?></td>
+
+ </tr>	 
+   <?php
+  }
+  ?>
+</tbody>
+</table>
+
+</html>
